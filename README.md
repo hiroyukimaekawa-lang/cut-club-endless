@@ -10,12 +10,42 @@ npm run build      # 本番ビルド → dist/
 npm run preview    # ビルド結果の確認
 ```
 
-## Cloudflare Pages 設定
+## デプロイ先：Cloudflare Pages
+
+このサイトはサーバーを必要としません。ビルド結果の `dist/` は
+HTML・CSS・JavaScript・画像だけの静的ファイルなので、Pages にそのまま置けます。
+
+### GitHubリポジトリ連携で公開する（推奨）
+
+Cloudflare ダッシュボード → Workers & Pages → Create → Pages →
+Connect to Git で `hiroyukimaekawa-lang/cut-club-endless` を選び、以下を設定します。
 
 | 項目 | 値 |
 | --- | --- |
+| Framework preset | None（または Vite） |
 | Build command | `npm run build` |
 | Build output directory | `dist` |
+| Root directory | （空欄のまま） |
+| Node version | `.node-version` の `22` が自動で使われます |
+
+以降は `main` へ push するたびに自動でビルド・公開されます。
+
+### 手元から直接アップロードする場合
+
+```bash
+npm run build
+npx wrangler pages deploy dist --project-name=cut-club-endless
+```
+
+### Pages 用の設定ファイル
+
+| ファイル | 役割 |
+| --- | --- |
+| `public/_headers` | セキュリティヘッダーとキャッシュ設定（ビルド時に `dist/_headers` へコピー） |
+| `.node-version` | Pages のビルドで使う Node のバージョン |
+
+`_redirects` は置いていません。1ページ構成でクライアント側ルーティングを使っていないため、
+存在しないURLは Pages の標準どおり 404 を返すのが正しい挙動です。
 
 ## 構成
 
