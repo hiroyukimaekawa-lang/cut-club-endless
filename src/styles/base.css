@@ -1,0 +1,252 @@
+/* ==========================================================================
+   base.css — リセット / デザイントークン / 日本語タイポグラフィの土台
+   ========================================================================== */
+
+:root {
+  /* 色：warm ivory を基調に、charcoal の文字、muted sage のアクセント */
+  --bg: #faf7f1;
+  --bg-alt: #f3efe5;
+  --bg-deep: #ece7db;
+  --ink: #262521;
+  --ink-2: #55524a;
+  --ink-3: #6f6a5e;
+  --accent: #5c6b56;
+  --accent-soft: #dde2d6;
+  --line: rgba(38, 37, 33, 0.14);
+  --line-soft: rgba(38, 37, 33, 0.08);
+
+  /* 書体：見出しは明朝、本文はゴシック */
+  --font-mincho: 'Zen Old Mincho', 'Hiragino Mincho ProN', 'Yu Mincho', YuMincho, 'MS PMincho', serif;
+  --font-gothic: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Noto Sans JP', 'Yu Gothic',
+    YuGothic, Meiryo, system-ui, sans-serif;
+
+  /* 余白リズム */
+  --gutter: 20px;
+  --section-y: 88px;
+  --shell: 1140px;
+  --header-h: 64px;
+}
+
+@media (min-width: 600px) {
+  :root {
+    --gutter: 32px;
+    --section-y: 112px;
+  }
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --gutter: 48px;
+    --section-y: 160px;
+    --header-h: 84px;
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+  scroll-padding-top: calc(var(--header-h) + 16px);
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-gothic);
+  font-size: 15px;
+  line-height: 2;
+  letter-spacing: 0.04em;
+  overflow-x: hidden;
+
+  /* 日本語の折り返し規則 */
+  word-break: normal;
+  overflow-wrap: anywhere;
+  line-break: strict;
+  font-feature-settings: 'palt' 1;
+  -webkit-font-smoothing: antialiased;
+}
+
+@media (min-width: 768px) {
+  body {
+    font-size: 16px;
+  }
+}
+
+body.is-locked {
+  overflow: hidden;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  margin: 0;
+  font-family: var(--font-mincho);
+  font-weight: 500;
+  word-break: normal;
+  line-break: strict;
+  overflow-wrap: normal;
+  text-wrap: balance;
+}
+
+p,
+ul,
+ol,
+dl,
+dd,
+figure {
+  margin: 0;
+}
+
+ul {
+  padding: 0;
+  list-style: none;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* 文節単位で折り返す（対応ブラウザのみ。非対応環境は通常の折り返しにフォールバック）。
+   「ご相談く／ださい」「生／活」のような語中での分断を防ぐ。 */
+h1,
+h2,
+h3,
+.hero__lead,
+.section-lead,
+.prose p,
+.point__text,
+.menu-block__lead,
+.note,
+.footer__msg,
+.info-row dd,
+.drawer__foot {
+  word-break: auto-phrase;
+  /* overflow-wrap: anywhere が文節判定より優先されて語中で折れるのを防ぐ。
+     日本語は文字間で折り返せるため、これでもはみ出しは起きない。 */
+  overflow-wrap: normal;
+}
+
+/* --------------------------------------------------------------------------
+   日本語の意味単位を守るためのユーティリティ
+   .h-line  … 見出しの1行（意味のまとまり）を block で保持する
+   .keep    … 本文中の短い文節を inline-block で保持し、途中で折らない
+   .nowrap  … 店名など、分断すると意味が壊れる短い範囲のみ
+   -------------------------------------------------------------------------- */
+
+.h-line {
+  display: block;
+}
+
+.keep {
+  display: inline-block;
+}
+
+.nowrap {
+  white-space: nowrap;
+}
+
+/* 狭い画面では意味単位で折り返せるよう nowrap を解除する */
+.nowrap-sm {
+  white-space: nowrap;
+}
+
+@media (max-width: 400px) {
+  .nowrap-sm {
+    white-space: normal;
+  }
+}
+
+.tbd {
+  color: var(--ink-3);
+  font-size: 0.92em;
+  letter-spacing: 0.08em;
+}
+
+.skip-link {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  z-index: 200;
+}
+
+.skip-link:focus {
+  width: auto;
+  height: auto;
+  margin: 0;
+  padding: 12px 20px;
+  left: 12px;
+  top: 12px;
+  clip-path: none;
+  background: var(--ink);
+  color: var(--bg);
+}
+
+/* --------------------------------------------------------------------------
+   スクロール表示（控えめなfade-up）
+   -------------------------------------------------------------------------- */
+
+.reveal-on [data-reveal] {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.9s cubic-bezier(0.22, 0.61, 0.36, 1),
+    transform 0.9s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+.reveal-on [data-reveal].is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .reveal-on [data-reveal],
+  .reveal-on [data-reveal].is-visible {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}

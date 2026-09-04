@@ -1,0 +1,12 @@
+TASK.mdを実行してください。
+
+AGENTS.md / CLAUDE.md / docs/PROJECT_BRIEF.md を確認し、
+日本語サイトのため skills/japanese-web-typography/SKILL.md を必ず適用してください。
+
+カット倶楽部エンドレスの参考HPを実装し、
+375px / 390px / 430px / 768px / 1024px / 1440pxでVisual QAを行ってください。
+
+未確認の住所・電話番号・営業時間・料金・予約URL等は創作せずTODO表示にしてください。
+
+コード作成だけで完了せず、
+実際のレンダリングを確認し、日本語の不自然な改行があれば修正→再確認まで実施してください。

@@ -1,0 +1,7 @@
+node_modules
+dist
+.DS_Store
+*.local
+
+# ローカル専用のプレビュー設定
+.claude/
